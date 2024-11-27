@@ -1,43 +1,38 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
 // Criação do contexto
 const CarrinhoContext = createContext();
 
-export const useCarrinho = () => {
-  return useContext(CarrinhoContext);
-};
-
-export const CarrinhoProvider = ({ children }) => {
+// Provider que vai envolver o aplicativo
+export function CarrinhoProvider({ children }) {
   const [carrinho, setCarrinho] = useState([]);
 
+  // Adicionar item ao carrinho
   const adicionarAoCarrinho = (produto) => {
-    setCarrinho((prevCarrinho) => {
-      const produtoExistente = prevCarrinho.find(
-        (item) => item.id === produto.id
-      );
-      if (produtoExistente) {
-        return prevCarrinho.map((item) =>
-          item.id === produto.id
-            ? { ...item, quantidade: item.quantidade + 1 }
-            : item
-        );
-      } else {
-        return [...prevCarrinho, { ...produto, quantidade: 1 }];
-      }
-    });
+    setCarrinho([...carrinho, produto]);
   };
 
+  // Remover item do carrinho
   const removerDoCarrinho = (id) => {
-    setCarrinho((prevCarrinho) =>
-      prevCarrinho.filter((item) => item.id !== id)
-    );
+    setCarrinho(carrinho.filter((produto) => produto.id !== id));
+  };
+
+  // Limpar carrinho
+  const limparCarrinho = () => {
+    setCarrinho([]);
   };
 
   return (
     <CarrinhoContext.Provider
-      value={{ carrinho, adicionarAoCarrinho, removerDoCarrinho }}
+      value={{ carrinho, adicionarAoCarrinho, removerDoCarrinho, limparCarrinho }}
     >
       {children}
     </CarrinhoContext.Provider>
   );
-};
+}
+
+// Hook para acessar o contexto mais facilmente
+export function useCarrinho() {
+  return useContext(CarrinhoContext);
+}
+

@@ -1,83 +1,37 @@
-import React from "react";
-import MenuComponent from "../../components/menu";
-import { useCarrinho } from "../../context/carrinhoContext";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CarrinhoPage = ({ finalizarCompra }) => {
-  const { carrinho, removerDoCarrinho, adicionarAoCarrinho } = useCarrinho();
+function CarrinhoPage({ carrinho, removerDoCarrinho }) {
+  const navigate = useNavigate();
 
-  // Calcular o total do carrinho
-  const total = carrinho.reduce(
-    (acc, item) => acc + item.preco * item.quantidade,
-    0
-  );
+  const irParaFinalizarCompra = () => {
+    if (carrinho.length === 0) {
+      alert('Seu carrinho está vazio! Adicione produtos antes de finalizar a compra.');
+      return;
+    }
+    navigate('/finalizar-compra'); // Redireciona para a página de finalização
+  };
 
   return (
-    <>
-      <MenuComponent />
-      <div className="container">
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item active" aria-current="page">
-              <Link to="/"><i className="bi bi-house"></i> Início</Link>
-            </li>
-            <li className="breadcrumb-item" aria-current="page">Carrinho de Compras</li>
-          </ol>
-        </nav>
-
-        {carrinho.length === 0 ? (
-          <h2>Seu carrinho está vazio.</h2>
-        ) : (
-          <>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Produto</th>
-                  <th>Preço</th>
-                  <th>Quantidade</th>
-                  <th>Sub-total</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {carrinho.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.nome}</td>
-                    <td>{item.preco.toFixed(2)}</td>
-                    <td>{item.quantidade}</td>
-                    <td>{(item.preco * item.quantidade).toFixed(2)}</td>
-                    <td>
-                      <button
-                        className="btn btn-success btn-sm"
-                        onClick={() => adicionarAoCarrinho(item)}
-                      >
-                        <i className="bi bi-plus"></i>
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => removerDoCarrinho(item.id)}
-                      >
-                        <i className="bi bi-trash3"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th colSpan={3}>Total a Pagar</th>
-                  <th colSpan={2}>R$ {total.toFixed(2)}</th>
-                </tr>
-              </tfoot>
-            </table>
-            <button className="btn btn-primary" onClick={finalizarCompra}>
-              Finalizar Compra
-            </button>
-          </>
-        )}
-      </div>
-    </>
+    <div>
+      <h2>Carrinho</h2>
+      {carrinho.length === 0 ? (
+        <p>Seu carrinho está vazio!</p>
+      ) : (
+        <div>
+          <ul>
+            {carrinho.map((produto, index) => (
+              <li key={index}>
+                {produto.nome} - R${produto.preco.toFixed(2)}
+                <button onClick={() => removerDoCarrinho(produto.id)}>Remover</button>
+              </li>
+            ))}
+          </ul>
+          <button onClick={irParaFinalizarCompra}>Finalizar Compra</button>
+        </div>
+      )}
+    </div>
   );
-};
+}
 
 export default CarrinhoPage;
