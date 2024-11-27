@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 import "font-awesome/css/font-awesome.min.css";
 import { CarrinhoProvider } from "./context/carrinhoContext";
-
+ // Não precisa do caminho explícito, só o nome do arquivo
+import { Link } from "react-router-dom"; // Importar o Link para navegação do React Router
 
 // Cabeçalho
 function Header({ abrirCarrinho }) {
@@ -12,10 +13,10 @@ function Header({ abrirCarrinho }) {
       <nav>
         <ul>
           <li>
-            <a href="/">Home</a>
+            <Link to="/">Home</Link> {/* Link para a Home */}
           </li>
           <li>
-            <a href="/produtos">Produtos</a>
+            <Link to="/produtos">Produtos</Link> {/* Link para Produtos */}
           </li>
           <li>
             <button className="btn-cart" onClick={abrirCarrinho}>
@@ -50,40 +51,11 @@ function Main({ produtos, adicionarAoCarrinho }) {
   );
 }
 
-// Carrinho
-function Carrinho({ carrinho, removerDoCarrinho, fecharCarrinho }) {
-  return (
-    <aside className="carrinho-overlay">
-      <button className="btn-voltar" onClick={fecharCarrinho}>
-        ← Voltar
-      </button>
-      <h3>Carrinho</h3>
-      {carrinho.length === 0 ? (
-        <p>Seu carrinho está vazio.</p>
-      ) : (
-        <ul className="carrinho-lista">
-          {carrinho.map((produto, index) => (
-            <li key={index} className="carrinho-item">
-              <img src={produto.imagem} alt={produto.nome} className="carrinho-imagem" />
-              <div>
-                <h4>{produto.nome}</h4>
-                <p>R${produto.preco}</p>
-                <button className="btn-remove" onClick={() => removerDoCarrinho(index)}>
-                  Remover
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </aside>
-  );
-}
-
 // App
 function App() {
   const [carrinho, setCarrinho] = useState([]);
   const [carrinhoAberto, setCarrinhoAberto] = useState(false);
+  const [formularioVisible, setFormularioVisible] = useState(false); // Controle do formulário
 
   const produtos = [
     { nome: "Iphone 13 Pro", descricao: "O melhor smartphone", preco: 3349.99, imagem: "/img/produto4.jpeg" },
@@ -93,26 +65,54 @@ function App() {
   ];
 
   const adicionarAoCarrinho = (produto) => {
-    setCarrinho([...carrinho, produto]);
+    setCarrinho([...carrinho, produto]); // Adiciona o produto ao carrinho
   };
 
   const removerDoCarrinho = (index) => {
-    const novoCarrinho = carrinho.filter((_, i) => i !== index);
+    const novoCarrinho = carrinho.filter((_, i) => i !== index); // Remove o produto do carrinho pelo índice
     setCarrinho(novoCarrinho);
+  };
+
+  // Função chamada ao clicar em "Finalizar Compra"
+  const handleFinalizarCompra = () => {
+    console.log("Finalizando compra..."); // Adicionando o log para debugar
+    setFormularioVisible(true); // Exibe o formulário de dados do cliente
   };
 
   return (
     <CarrinhoProvider>
       <div className="App">
-        <Header abrirCarrinho={() => setCarrinhoAberto(true)} />
+        <Header abrirCarrinho={() => setCarrinhoAberto(true)} /> {/* Abre o carrinho */}
         <div className="main-container">
+          {/* Exibe os produtos */}
           <Main produtos={produtos} adicionarAoCarrinho={adicionarAoCarrinho} />
+
+          {/* Exibe o carrinho se ele estiver aberto */}
           {carrinhoAberto && (
-            <Carrinho
+            <CarrinhoPage
               carrinho={carrinho}
               removerDoCarrinho={removerDoCarrinho}
-              fecharCarrinho={() => setCarrinhoAberto(false)}
+              finalizarCompra={handleFinalizarCompra} // Passa a função para o CarrinhoPage
             />
+          )}
+
+          {/* Exibe o formulário de dados do cliente antes de concluir a compra */}
+          {formularioVisible && (
+            <div className="formulario-compra">
+              <h3>Finalize sua compra</h3>
+              <form>
+                <input type="text" placeholder="Nome Completo" required />
+                <input type="text" placeholder="Endereço" required />
+                <input type="email" placeholder="Email" required />
+                <select required>
+                  <option value="">Escolha a forma de pagamento</option>
+                  <option value="pix">Pix</option>
+                  <option value="cartao">Cartão</option>
+                  <option value="boleto">Boleto</option>
+                </select>
+                <button type="submit">Concluir Compra</button>
+              </form>
+            </div>
           )}
         </div>
       </div>

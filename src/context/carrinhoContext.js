@@ -1,32 +1,43 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 
-export const CarrinhoContext = createContext();
+// Criação do contexto
+const CarrinhoContext = createContext();
 
-export const CarrinhoProvider = ({children}) => {
-    const [carrinho, setCarrinho] = useState([]);
-    
-    const addCarrinho = (produto) => {
-        setCarrinho((prevCart) => {
-            const existingItem = prevCart.find((item) => produto.id === item.id);
-            if(existingItem){
-                return prevCart.map((item) => item.id === produto.id ? 
-                        { ...item, quantidade: item.quantidade + 1 } : item);
-            }
-            return [...prevCart, { ...produto, quantidade: 1 }];
-        });
-    }
+export const useCarrinho = () => {
+  return useContext(CarrinhoContext);
+};
 
-    const delCarrinho = (id) => {
-        setCarrinho((prevCart) => prevCart.map((item) => item.id === id
-                    ? { ...item, quantidade: item.quantidade - 1 }
-                    : item).filter((item) => item.quantidade > 0));
-    }
+export const CarrinhoProvider = ({ children }) => {
+  const [carrinho, setCarrinho] = useState([]);
 
-    const limparCarrinho = () => setCarrinho([]);
+  const adicionarAoCarrinho = (produto) => {
+    setCarrinho((prevCarrinho) => {
+      const produtoExistente = prevCarrinho.find(
+        (item) => item.id === produto.id
+      );
+      if (produtoExistente) {
+        return prevCarrinho.map((item) =>
+          item.id === produto.id
+            ? { ...item, quantidade: item.quantidade + 1 }
+            : item
+        );
+      } else {
+        return [...prevCarrinho, { ...produto, quantidade: 1 }];
+      }
+    });
+  };
 
-    return (
-        <CarrinhoContext.Provider value={{ carrinho, addCarrinho, delCarrinho, limparCarrinho }}>
-            {children}
-        </CarrinhoContext.Provider>
+  const removerDoCarrinho = (id) => {
+    setCarrinho((prevCarrinho) =>
+      prevCarrinho.filter((item) => item.id !== id)
     );
-}
+  };
+
+  return (
+    <CarrinhoContext.Provider
+      value={{ carrinho, adicionarAoCarrinho, removerDoCarrinho }}
+    >
+      {children}
+    </CarrinhoContext.Provider>
+  );
+};
