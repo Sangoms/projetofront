@@ -1,0 +1,203 @@
+// QUESTÃO 1 
+void main() {
+   double tempFarenheit = -32;
+   double  tempCelsius = (tempFarenheit - 32) * 5/9 ;
+  print('${tempFarenheit}°F = ${tempCelsius}°C');
+
+}
+
+//QUESTÃO 2
+void main() {
+  int horas = 2;     
+  int minutos = 30;  
+  int segundos = 45; 
+
+
+  int totalSegundos = (horas * 3600) + (minutos * 60) + segundos;
+
+
+  print("O total de segundos é: $totalSegundos");
+}
+
+//QUESTÃO 3
+void main() {
+  
+  double custoEspetaculo = 6000.00;  
+  double precoConvite = 20.00;      
+
+  
+  int quantidadeConvites = (custoEspetaculo / precoConvite).ceil();
+
+ 
+  print("Você precisa vender pelo menos $quantidadeConvites convites para cobrir o custo do espetáculo.");
+}
+// QUESTÃO 4
+void main() {
+  double salarioFixo = 1500.00;  
+  double valorVendas = 10000.00;
+
+  double comissao = valorVendas * 0.12;
+
+  double salarioFinal = salarioFixo + comissao;
+  print("Comissão: R\$${comissao.toStringAsFixed(2)}");
+  print("Salário final: R\$${salarioFinal.toStringAsFixed(2)}");
+}
+//QUESTÃO 5
+void main() {
+  double valorDiaria = 38.00;
+  int diasTrabalhados = 10;
+
+  double salarioBruto = diasTrabalhados * valorDiaria;
+  double impostoRenda = salarioBruto * 0.06;
+  double salarioLiquido = salarioBruto - impostoRenda;
+
+  print("Valor da diária: R\$${valorDiaria.toStringAsFixed(2)}");
+  print("Total do salário bruto: R\$${salarioBruto.toStringAsFixed(2)}");
+  print("Imposto de Renda (6%): R\$${impostoRenda.toStringAsFixed(2)}");
+  print("Salário líquido: R\$${salarioLiquido.toStringAsFixed(2)}");
+} 
+//QUESTÃO 6
+void main() {
+  double tarifaBase = 4.59;
+  double custoAdicional = 1.30;
+  int duracaoChamada = 10;
+
+  if (duracaoChamada <= 3) {
+    print("Total a ser pago: R\$${tarifaBase.toStringAsFixed(2)}");
+  } else {
+    int minutosAdicionais = duracaoChamada - 3;
+    double total = tarifaBase + minutosAdicionais * custoAdicional;
+    print("Total a ser pago: R\$${total.toStringAsFixed(2)}");
+  }
+}
+//QUESTÃO 7
+void main() {
+  double precoRefrigerante = 8.00;
+  double precoSalgado = 12.00;
+  double precoSorvete = 9.00;
+
+  int quantidadeRefrigerante = 4;
+  int quantidadeSalgado = 3;
+  int quantidadeSorvete = 1;
+
+  double total = (quantidadeRefrigerante * precoRefrigerante) +
+      (quantidadeSalgado * precoSalgado) +
+      (quantidadeSorvete * precoSorvete);
+
+  print("Total a ser pago: R\$${total.toStringAsFixed(2)}");
+}
+//QUESTÃO 8
+void main() {
+  double precoRefrigerante = 8.00;
+  double precoSalgado = 12.00;
+  double precoSorvete = 9.00;
+
+  int quantidadeRefrigerante = 2;  
+  int quantidadeSalgado = 3;   
+  int quantidadeSorvete = 1;      
+  int quantidadePessoas = 4;
+  
+  double total = (quantidadeRefrigerante * precoRefrigerante) +
+      (quantidadeSalgado * precoSalgado) +
+      (quantidadeSorvete * precoSorvete);
+
+  double valorPorPessoa = total / quantidadePessoas;
+
+  print("Total a ser pago: R\$${total.toStringAsFixed(2)}");
+  print("Valor a ser pago por cada pessoa: R\$${valorPorPessoa.toStringAsFixed(2)}");
+}
+//questão 9
+void main() {
+  String tipoCarro = "popular"; // "luxo" ou "popular"
+  int diasAluguel = 3; // Substitua pelo número de dias desejado
+  int kmPercorridos = 120; // Substitua pelo número de km percorridos
+
+  double valorDiario;
+  double valorKm;
+
+  if (tipoCarro == "popular") {
+    valorDiario = 90.00;
+    if (kmPercorridos <= 100) {
+      valorKm = kmPercorridos * 0.20;
+    } else {
+      valorKm = kmPercorridos * 0.10;
+    }
+  } else if (tipoCarro == "luxo") {
+    valorDiario = 150.00;
+    if (kmPercorridos <= 200) {
+      valorKm = kmPercorridos * 0.30;
+    } else {
+      valorKm = kmPercorridos * 0.25;
+    }
+  } else {
+    print("Tipo de carro inválido.");
+    return;
+  }
+
+  double total = (valorDiario * diasAluguel) + valorKm;
+
+  print("Preço a ser pago: R\$${total.toStringAsFixed(2)}");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
